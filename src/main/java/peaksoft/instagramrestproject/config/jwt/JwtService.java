@@ -20,6 +20,7 @@ public class JwtService {
 
     @Value("${security.secret.key}")
     private String secretKey;
+
     // create token
     public String generateToken(User user) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);

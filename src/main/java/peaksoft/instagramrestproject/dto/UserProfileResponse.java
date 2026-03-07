@@ -1,6 +1,7 @@
 package peaksoft.instagramrestproject.dto;
 
 import lombok.Builder;
+
 import java.util.List;
 
 @Builder
@@ -12,6 +13,6 @@ public record UserProfileResponse(
         String biography,
         int countSubscribers,
         int countSubscriptions,
-         List<PostResponse> posts // Мы добавим PostResponse чуть позже, когда займемся постами
+        List<PostResponse> posts // Мы добавим PostResponse чуть позже, когда займемся постами
 ) {
 }

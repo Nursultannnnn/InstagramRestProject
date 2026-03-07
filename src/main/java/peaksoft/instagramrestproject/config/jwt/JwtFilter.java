@@ -14,41 +14,36 @@ import peaksoft.instagramrestproject.entity.User;
 
 import java.io.IOException;
 
+@Component
+@RequiredArgsConstructor
+public class JwtFilter extends OncePerRequestFilter {
 
+    private final JwtService jwtService;
 
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
-    @Component
-    @RequiredArgsConstructor
-    public class JwtFilter extends OncePerRequestFilter {
-
-        private final JwtService jwtService;
-
-        @Override
-        protected void doFilterInternal(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        FilterChain filterChain) throws ServletException, IOException {
-
-            String header = request.getHeader("Authorization");
-            if (header != null && header.startsWith("Bearer ")) {
-                String token = header.substring(7);
-                try {
-                    User user = jwtService.verifyToken(token);
-                    if (user != null) {
-                        SecurityContextHolder.getContext().setAuthentication(
-                                new UsernamePasswordAuthenticationToken(
-                                        user.getEmail(),
-                                        user.getPassword(),
-                                        user.getAuthorities())
-                        );
-
-                    }
-
-                } catch (JWTVerificationException e) {
-                    System.out.println(e.getMessage());
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            try {
+                User user = jwtService.verifyToken(token);
+                if (user != null) {
+                    SecurityContextHolder.getContext().setAuthentication(
+                            new UsernamePasswordAuthenticationToken(
+                                    user.getEmail(),
+                                    user.getPassword(),
+                                    user.getAuthorities())
+                    );
                 }
+            } catch (JWTVerificationException e) {
+                System.out.println(e.getMessage());
             }
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
+}
 
 
