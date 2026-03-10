@@ -30,10 +30,10 @@ public class Comment {
     LocalDate createdAt;
 
     @ManyToOne
-    User user; // Кто написал
+    User user;
     @ManyToOne
-    Post post; // К какому посту
+    Post post;
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    List<Like> likes; // Лайки на комменте
+    List<Like> likes;
 
 }

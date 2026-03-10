@@ -7,6 +7,8 @@ import peaksoft.instagramrestproject.dto.post.PostRequest;
 import peaksoft.instagramrestproject.dto.post.PostResponse;
 import peaksoft.instagramrestproject.service.PostService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -32,5 +34,10 @@ public class PostApi {
     @DeleteMapping("/{postId}")
     public SimpleResponse delete(@PathVariable Long postId) {
         return postService.deletePost(postId);
+    }
+
+    @GetMapping
+    public List<PostResponse> getAll() {
+        return postService.getAllPosts();
     }
 }

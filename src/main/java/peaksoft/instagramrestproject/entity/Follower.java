@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "followers")
 @Getter
 @Setter
-@NoArgsConstructor // Добавь аннотации!
+@NoArgsConstructor
 public class Follower {
     @Id
     @GeneratedValue(

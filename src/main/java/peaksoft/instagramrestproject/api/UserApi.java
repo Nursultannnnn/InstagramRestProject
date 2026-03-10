@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import peaksoft.instagramrestproject.dto.SignUpRequest;
 import peaksoft.instagramrestproject.dto.SimpleResponse;
 import peaksoft.instagramrestproject.dto.UserProfileResponse;
+import peaksoft.instagramrestproject.dto.user.UserResponse;
 import peaksoft.instagramrestproject.service.UserService;
 
 import java.util.List;
@@ -18,10 +19,9 @@ public class UserApi {
 
     // Получить всех пользователей
     @GetMapping
-    public List<UserProfileResponse> getAll() {
+    public List<UserResponse> getAll() {
         return userService.getAllUsers();
     }
-
     // Получить профиль конкретного юзера (Твое ТЗ)
     @GetMapping("/{userId}")
     public UserProfileResponse getProfile(@PathVariable Long userId) {

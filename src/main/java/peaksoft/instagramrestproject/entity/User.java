@@ -41,7 +41,6 @@ public class User implements UserDetails {
     String phoneNumber;
     Role role;
 
-    // СВЯЗИ
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     UserInfo userInfo;
 

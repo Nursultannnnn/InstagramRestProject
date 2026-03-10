@@ -2,11 +2,11 @@ package peaksoft.instagramrestproject.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import peaksoft.instagramrestproject.config.jwt.JwtService;
 import peaksoft.instagramrestproject.dto.*;
+import peaksoft.instagramrestproject.dto.user.UserResponse;
 import peaksoft.instagramrestproject.entity.Follower;
 import peaksoft.instagramrestproject.entity.User;
 import peaksoft.instagramrestproject.entity.UserInfo;
@@ -234,9 +234,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserProfileResponse> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepo.findAll().stream()
-                .map(user -> userProfile(user.getId()))
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .image(user.getUserInfo().getImage())
+                        .build())
                 .toList();
     }
 

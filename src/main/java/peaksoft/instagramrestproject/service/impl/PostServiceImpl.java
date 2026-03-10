@@ -116,4 +116,18 @@ public class PostServiceImpl implements PostService {
         );
     }
 
+    @Override
+    public List<PostResponse> getAllPosts() {
+        // Достаем все посты из репозитория
+        return postRepo.findAll().stream()
+                // Сортируем по дате (от новых к старым)
+                .sorted((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()))
+                .map(post -> new PostResponse(
+                        post.getId(),
+                        post.getImages().isEmpty() ? null : post.getImages().get(0).getImageURL(),
+                        post.getDescription()
+                ))
+                .toList();
+    }
+
 }

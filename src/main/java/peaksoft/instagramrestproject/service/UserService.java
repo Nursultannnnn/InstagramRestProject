@@ -1,6 +1,7 @@
 package peaksoft.instagramrestproject.service;
 
 import peaksoft.instagramrestproject.dto.*;
+import peaksoft.instagramrestproject.dto.user.UserResponse;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserService {
 
     UserProfileResponse userProfile(Long userId);
 
-    List<UserProfileResponse> getAllUsers();
+    List<UserResponse> getAllUsers();
 
     UserProfileResponse getUserById(Long userId);
 }
