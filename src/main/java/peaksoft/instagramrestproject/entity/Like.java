@@ -25,15 +25,12 @@ public class Like {
             allocationSize = 1)
     Long id;
 
-    // Кто поставил лайк
     @ElementCollection
     List<Long> userIds;
 
-    // Связь с постом (если лайкнули пост)
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     Post post;
 
-    // Связь с комментарием (если лайкнули комментарий)
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     Comment comment;
 }

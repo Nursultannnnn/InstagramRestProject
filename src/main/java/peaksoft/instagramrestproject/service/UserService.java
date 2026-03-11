@@ -18,7 +18,4 @@ public interface UserService {
 
     List<UserResponse> getAllUsers();
 
-    UserProfileResponse getUserById(Long userId);
-
-    List<UserResponse> search(String keyword);
 }

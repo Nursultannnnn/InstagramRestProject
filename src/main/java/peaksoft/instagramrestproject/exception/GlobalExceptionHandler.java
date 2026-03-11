@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
         return ExceptionResponse.builder()
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .messageClassName(ex.getClass().getSimpleName())
-                .message("Сервердик ката")
+                .message("Ошибка в сервере")
                 .build();
     }
 

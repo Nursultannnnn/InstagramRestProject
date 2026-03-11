@@ -31,10 +31,10 @@ public class Post {
     LocalDateTime createdAt;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    User user; // Автор поста
+    User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    List<Image> images; // Связь с картинками
+    List<Image> images;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     List<Comment> comments;

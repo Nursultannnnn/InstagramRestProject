@@ -28,7 +28,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     public SimpleResponse saveUserInfo(Long userId, UserInfoRequest request) {
         User user = userRepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        // Если у юзера уже есть инфо, просто обновляем или кидаем ошибку
         UserInfo userInfo = user.getUserInfo();
         if (userInfo == null) {
             userInfo = new UserInfo();
@@ -65,13 +64,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     @Transactional
     public SimpleResponse update(Long userId, UserInfoRequest request) {
-        return saveUserInfo(userId, request); // Используем логику сохранения для обновления
+        return saveUserInfo(userId, request);
     }
 
     @Override
     public SimpleResponse delete(Long id) {
         UserInfo userInfo = userInfoRepo.findById(id).orElseThrow();
-        // ВАЖНО: обнуляем ссылку в юзере перед удалением, чтобы не было ошибок констрейнтов
         userInfo.getUser().setUserInfo(null);
         userInfoRepo.delete(userInfo);
         return SimpleResponse.builder()
@@ -96,7 +94,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo info = userInfoRepo.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("UserInfo не найден"));
 
-        info.setImage(null); // Просто зануляем ссылку
+        info.setImage(null);
         return new SimpleResponse("Аватарка удалена", HttpStatus.OK);
     }
 }

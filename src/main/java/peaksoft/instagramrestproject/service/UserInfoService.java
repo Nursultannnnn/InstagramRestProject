@@ -5,9 +5,9 @@ import peaksoft.instagramrestproject.dto.userinfo.UserInfoRequest;
 import peaksoft.instagramrestproject.dto.userinfo.UserInfoResponse;
 
 public interface UserInfoService {
-    SimpleResponse saveUserInfo(Long userId, UserInfoRequest userInfoRequest); // Создать
-    UserInfoResponse findUserInfoByUserId(Long userId); // Найти по ID
-    SimpleResponse update(Long userId, UserInfoRequest request); // Обновить по ID
+    SimpleResponse saveUserInfo(Long userId, UserInfoRequest userInfoRequest);
+    UserInfoResponse findUserInfoByUserId(Long userId);
+    SimpleResponse update(Long userId, UserInfoRequest request);
     SimpleResponse delete(Long id);
     SimpleResponse changeImage(Long userId, String newImage);
     SimpleResponse deleteImage(Long userId);

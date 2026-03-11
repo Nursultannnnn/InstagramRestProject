@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import peaksoft.instagramrestproject.dto.SimpleResponse;
+import peaksoft.instagramrestproject.dto.follow.UserSearchResponse;
 import peaksoft.instagramrestproject.dto.user.UserResponse;
 import peaksoft.instagramrestproject.entity.Follower;
 import peaksoft.instagramrestproject.entity.User;
@@ -26,7 +27,6 @@ public class FollowerServiceImpl implements FollowerService {
 
     @Override
     public SimpleResponse followUser(Long targetUserId) {
-        // 1. Кто нажимает кнопку (текущий юзер)
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepo.getUserByEmail(email).orElseThrow();
 
@@ -34,13 +34,11 @@ public class FollowerServiceImpl implements FollowerService {
             throw new RuntimeException("Нельзя подписаться на самого себя!");
         }
 
-        // 2. На кого хотим подписаться
         User targetUser = userRepo.findById(targetUserId).orElseThrow();
 
         Follower myFollowerInfo = currentUser.getFollower();
         Follower targetFollowerInfo = targetUser.getFollower();
 
-        // 3. Логика: если уже подписан — удаляем, если нет — добавляем
         if (myFollowerInfo.getSubscriptions().contains(targetUserId)) {
             myFollowerInfo.getSubscriptions().remove(targetUserId);
             targetFollowerInfo.getSubscribers().remove(currentUser.getId());
@@ -57,7 +55,6 @@ public class FollowerServiceImpl implements FollowerService {
         Follower follower = followerRepo.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("Follower info not found"));
 
-        // Достаем всех юзеров, чьи ID есть в списке подписчиков
         return userRepo.findAllById(follower.getSubscribers()).stream()
                 .map(u -> new UserResponse(
                         u.getId(),
@@ -75,7 +72,6 @@ public class FollowerServiceImpl implements FollowerService {
         Follower follower = followerRepo.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("Follower info not found"));
 
-        // Достаем всех юзеров, на которых подписан этот человек
         return userRepo.findAllById(follower.getSubscriptions()).stream()
                 .map(u -> new UserResponse(
                         u.getId(),
@@ -86,5 +82,10 @@ public class FollowerServiceImpl implements FollowerService {
                         u.getUserInfo() != null ? u.getUserInfo().getFullName() : null
                 ))
                 .toList();
+    }
+
+    @Override
+    public List<UserSearchResponse> searchUsers(String query) {
+        return followerRepo.searchUsers(query);
     }
 }

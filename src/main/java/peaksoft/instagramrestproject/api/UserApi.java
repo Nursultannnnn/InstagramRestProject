@@ -17,12 +17,11 @@ public class UserApi {
 
     private final UserService userService;
 
-    // Получить всех пользователей
     @GetMapping
     public List<UserResponse> getAll() {
         return userService.getAllUsers();
     }
-    // Получить профиль конкретного юзера (Твое ТЗ)
+
     @GetMapping("/{userId}")
     public UserProfileResponse getProfile(@PathVariable Long userId) {
         return userService.userProfile(userId);
@@ -38,9 +37,6 @@ public class UserApi {
         return userService.deleteUser(userId);
     }
 
-//    @GetMapping("/{userId}")
-//    public UserProfileResponse getById(@PathVariable Long userId) {
-//        return userService.getUserById(userId); // Как только ты напишешь эту строку, метод в сервисе оживет!
-//    }
+
 
 }

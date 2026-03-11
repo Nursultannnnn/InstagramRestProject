@@ -40,7 +40,7 @@ public class LikeServiceImpl implements LikeService {
             return new SimpleResponse("Лайк убран", HttpStatus.OK);
         } else {
             Like like = Like.builder()
-                    .userIds(new ArrayList<>(List.of(user.getId()))) // Используем список ID
+                    .userIds(new ArrayList<>(List.of(user.getId())))
                     .post(post)
                     .build();
             likeRepo.save(like);
@@ -59,7 +59,7 @@ public class LikeServiceImpl implements LikeService {
             return new SimpleResponse("Лайк с комментария убран", HttpStatus.OK);
         } else {
             Like like = Like.builder()
-                    .userIds(new ArrayList<>(List.of(user.getId()))) // Используем список ID
+                    .userIds(new ArrayList<>(List.of(user.getId())))
                     .comment(comment)
                     .build();
             likeRepo.save(like);

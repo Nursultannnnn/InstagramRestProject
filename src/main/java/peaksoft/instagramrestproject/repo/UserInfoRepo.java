@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UserInfoRepo extends JpaRepository<UserInfo, Long> {
 
-    // Этот метод нужен, чтобы найти био и аватарку, зная ID самого пользователя
     @Query("SELECT ui FROM UserInfo ui WHERE ui.user.id = :userId")
     Optional<UserInfo> findByUserId(Long userId);
 

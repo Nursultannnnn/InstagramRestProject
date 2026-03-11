@@ -25,10 +25,10 @@ public class Follower {
     Long id;
 
     @ElementCollection
-    List<Long> subscribers; // Список ID тех, кто подписан на меня
+    List<Long> subscribers;
 
     @ElementCollection
-    List<Long> subscriptions; // Список ID тех, на кого подписан я
+    List<Long> subscriptions;
 
     @OneToOne
     User user;

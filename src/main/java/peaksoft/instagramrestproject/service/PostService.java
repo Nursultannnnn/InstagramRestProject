@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface PostService {
     SimpleResponse savePost(PostRequest postRequest);
-    SimpleResponse updatePost(Long postId, PostRequest postRequest); // Обновить
-    SimpleResponse deletePost(Long postId); // Удалить
-    PostResponse getPostById(Long postId); // Найти один пост
-    List<PostResponse> getAllPosts(); // Добавь эту строку
-}
+    SimpleResponse updatePost(Long postId, PostRequest postRequest);
+    SimpleResponse deletePost(Long postId);
+    PostResponse getPostById(Long postId);
+    List<PostResponse> getAllPosts(Long userId);}

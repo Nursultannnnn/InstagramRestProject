@@ -36,8 +36,8 @@ public class PostApi {
         return postService.deletePost(postId);
     }
 
-    @GetMapping
-    public List<PostResponse> getAll() {
-        return postService.getAllPosts();
+    @GetMapping("/user/{userId}")
+    public List<PostResponse> getAllPosts(@PathVariable Long userId) {
+        return postService.getAllPosts(userId);
     }
 }
