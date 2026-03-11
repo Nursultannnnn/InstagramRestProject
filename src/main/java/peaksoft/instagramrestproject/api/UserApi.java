@@ -2,7 +2,7 @@ package peaksoft.instagramrestproject.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import peaksoft.instagramrestproject.dto.SignUpRequest;
+import peaksoft.instagramrestproject.dto.auth.request.SignUpRequest;
 import peaksoft.instagramrestproject.dto.SimpleResponse;
 import peaksoft.instagramrestproject.dto.UserProfileResponse;
 import peaksoft.instagramrestproject.dto.user.UserResponse;

@@ -11,6 +11,8 @@ import peaksoft.instagramrestproject.dto.post.PostResponse;
 import peaksoft.instagramrestproject.entity.Image;
 import peaksoft.instagramrestproject.entity.Post;
 import peaksoft.instagramrestproject.entity.User;
+import peaksoft.instagramrestproject.exception.NotFoundException;
+import peaksoft.instagramrestproject.exception.UserMismatchException;
 import peaksoft.instagramrestproject.repo.ImageRepo;
 import peaksoft.instagramrestproject.repo.PostRepo;
 import peaksoft.instagramrestproject.repo.UserRepo;
@@ -84,11 +86,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public SimpleResponse deletePost(Long postId) {
         Post post = postRepo.findById(postId)
-                .orElseThrow(() -> new NoSuchElementException("Пост не найден"));
+                .orElseThrow(() -> new NotFoundException("Пост с id " + postId + " не найден"));
 
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!post.getUser().getEmail().equals(currentUserEmail)) {
-            throw new RuntimeException("Вы не можете удалить чужой пост!");
+            throw new UserMismatchException("Вы не можете удалить чужой пост!");
         }
 
         postRepo.delete(post);

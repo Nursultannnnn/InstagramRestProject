@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import peaksoft.instagramrestproject.dto.AuthResponse;
-import peaksoft.instagramrestproject.dto.SignInRequest;
-import peaksoft.instagramrestproject.dto.SignUpRequest;
+import peaksoft.instagramrestproject.dto.auth.response.AuthResponse;
+import peaksoft.instagramrestproject.dto.auth.request.SignInRequest;
+import peaksoft.instagramrestproject.dto.auth.request.SignUpRequest;
 import peaksoft.instagramrestproject.service.UserService;
 
 @RestController

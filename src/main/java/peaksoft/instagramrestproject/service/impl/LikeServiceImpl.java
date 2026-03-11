@@ -18,6 +18,7 @@ import peaksoft.instagramrestproject.service.LikeService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,35 +30,39 @@ public class LikeServiceImpl implements LikeService {
     private final CommentRepo commentRepo;
     private final UserRepo userRepo;
 
-    @Override
-    public SimpleResponse toggleLikePost(Long postId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepo.getUserByEmail(email).orElseThrow();
-        Post post = postRepo.findById(postId).orElseThrow();
+@Override
+public SimpleResponse toggleLikePost(Long postId) {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    User user = userRepo.getUserByEmail(email).orElseThrow();
 
-        if (likeRepo.existsByUserIdAndPostId(user.getId(), postId)) {
-            likeRepo.deleteByUserIdAndPostId(user.getId(), postId);
-            return new SimpleResponse("Лайк убран", HttpStatus.OK);
-        } else {
-            Like like = Like.builder()
-                    .userIds(new ArrayList<>(List.of(user.getId())))
-                    .post(post)
-                    .build();
-            likeRepo.save(like);
-            return new SimpleResponse("Лайк поставлен", HttpStatus.OK);
-        }
+    Optional<Like> existingLike = likeRepo.findByPostIdAndUserId(postId, user.getId());
+
+    if (existingLike.isPresent()) {
+        likeRepo.delete(existingLike.get());
+        return new SimpleResponse("Лайк убран", HttpStatus.OK);
+    } else {
+        Post post = postRepo.findById(postId).orElseThrow();
+        Like like = Like.builder()
+                .userIds(new ArrayList<>(List.of(user.getId())))
+                .post(post)
+                .build();
+        likeRepo.save(like);
+        return new SimpleResponse("Лайк поставлен", HttpStatus.OK);
     }
+}
 
     @Override
     public SimpleResponse toggleLikeComment(Long commentId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepo.getUserByEmail(email).orElseThrow();
-        Comment comment = commentRepo.findById(commentId).orElseThrow();
 
-        if (likeRepo.existsByUserIdAndCommentId(user.getId(), commentId)) {
-            likeRepo.deleteByUserIdAndCommentId(user.getId(), commentId);
+        Optional<Like> existingLike = likeRepo.findByCommentIdAndUserId(commentId, user.getId());
+
+        if (existingLike.isPresent()) {
+            likeRepo.delete(existingLike.get());
             return new SimpleResponse("Лайк с комментария убран", HttpStatus.OK);
         } else {
+            Comment comment = commentRepo.findById(commentId).orElseThrow();
             Like like = Like.builder()
                     .userIds(new ArrayList<>(List.of(user.getId())))
                     .comment(comment)
@@ -66,4 +71,5 @@ public class LikeServiceImpl implements LikeService {
             return new SimpleResponse("Комментарий лайкнут", HttpStatus.OK);
         }
     }
+
 }

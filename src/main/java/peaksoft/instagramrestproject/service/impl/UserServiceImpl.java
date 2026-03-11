@@ -6,12 +6,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import peaksoft.instagramrestproject.config.jwt.JwtService;
 import peaksoft.instagramrestproject.dto.*;
+import peaksoft.instagramrestproject.dto.auth.request.SignInRequest;
+import peaksoft.instagramrestproject.dto.auth.request.SignUpRequest;
+import peaksoft.instagramrestproject.dto.auth.response.AuthResponse;
 import peaksoft.instagramrestproject.dto.post.PostResponse;
 import peaksoft.instagramrestproject.dto.user.UserResponse;
 import peaksoft.instagramrestproject.entity.Follower;
 import peaksoft.instagramrestproject.entity.User;
 import peaksoft.instagramrestproject.entity.UserInfo;
 import peaksoft.instagramrestproject.enums.Role;
+import peaksoft.instagramrestproject.exception.AlreadyExistsException;
 import peaksoft.instagramrestproject.repo.PostRepo;
 import peaksoft.instagramrestproject.repo.UserRepo;
 import peaksoft.instagramrestproject.service.UserService;
@@ -34,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthResponse signUp(SignUpRequest request) {
         if (userRepo.existsByEmail(request.email())) {
-            throw new RuntimeException("Email " + request.email() + " уже занят!");
+            throw new AlreadyExistsException("Email " + request.email() + " уже занят!");
         }
         if (userRepo.existsByUsername(request.username())) {
             throw new RuntimeException("Username " + request.username() + " уже занят!");

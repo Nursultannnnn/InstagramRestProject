@@ -1,4 +1,4 @@
-package peaksoft.instagramrestproject.dto;
+package peaksoft.instagramrestproject.dto.auth.request;
 
 public record SignInRequest(
         String email,

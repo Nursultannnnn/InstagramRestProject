@@ -1,4 +1,4 @@
-package peaksoft.instagramrestproject.config;
+package peaksoft.instagramrestproject.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

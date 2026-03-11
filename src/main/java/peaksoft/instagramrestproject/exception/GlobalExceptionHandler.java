@@ -2,75 +2,60 @@ package peaksoft.instagramrestproject.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.NoSuchElementException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
-
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponse notFoundException(NoSuchElementException ex){
+    public ExceptionResponse handleNotFound(NotFoundException e) {
         return ExceptionResponse.builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
-                .messageClassName(ex.getClass().getSimpleName())
-                .message(ex.getMessage())
+                .exceptionName(e.getClass().getSimpleName())
+                .message(e.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionResponse handleAlreadyExists(AlreadyExistsException e) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.CONFLICT)
+                .exceptionName(e.getClass().getSimpleName())
+                .message(e.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(UserMismatchException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse handleUserMismatch(UserMismatchException e) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.FORBIDDEN)
+                .exceptionName(e.getClass().getSimpleName())
+                .message(e.getMessage())
                 .build();
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse badCredentialsException(BadCredentialsException ex){
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse handleBadCredentials(BadCredentialsException e) {
         return ExceptionResponse.builder()
-                .httpStatus(HttpStatus.BAD_REQUEST)
-                .messageClassName(ex.getClass().getSimpleName())
-                .message(ex.getMessage())
+                .httpStatus(HttpStatus.FORBIDDEN)
+                .exceptionName(e.getClass().getSimpleName())
+                .message("Неверный пароль или логин")
                 .build();
     }
+
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ExceptionResponse RuntimeException(RuntimeException ex){
-        return ExceptionResponse.builder()
-                .httpStatus(HttpStatus.CONFLICT)
-                .messageClassName(ex.getClass().getSimpleName())
-                .message(ex.getMessage())
-                .build();
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse validationException(MethodArgumentNotValidException ex){
-        String message = ex.getBindingResult()
-                .getFieldError()
-                .getDefaultMessage();
-
+    public ExceptionResponse handleRuntime(RuntimeException e) {
         return ExceptionResponse.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)
-                .messageClassName(ex.getClass().getSimpleName())
-                .message(message)
+                .exceptionName(e.getClass().getSimpleName())
+                .message(e.getMessage())
                 .build();
     }
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionResponse globalException(Exception ex){
-        return ExceptionResponse.builder()
-                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                .messageClassName(ex.getClass().getSimpleName())
-                .message("Ошибка в сервере")
-                .build();
-    }
-
-
-
-
-
-
 }
-
