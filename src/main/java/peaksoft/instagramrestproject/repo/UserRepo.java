@@ -14,6 +14,9 @@ public interface UserRepo extends JpaRepository<User, Long> {
     Optional<User>  getUserByEmail(String email);
 
     // Метод для глобального поиска по username или fullName
-    @Query("SELECT u FROM User u LEFT JOIN u.userInfo ui WHERE u.username ILIKE %:word% OR ui.fullName ILIKE %:word%")
-    List<User> searchUsers(String word);
+//    @Query("SELECT u FROM User u LEFT JOIN u.userInfo ui WHERE u.username ILIKE %:word% OR ui.fullName ILIKE %:word%")
+//    List<User> searchUsers(String word);
+
+    @Query("SELECT u FROM User u JOIN u.userInfo ui WHERE u.username ILIKE %:keyword% OR ui.fullName ILIKE %:keyword%")
+    List<User> searchUsers(String keyword);
 }

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import peaksoft.instagramrestproject.config.jwt.JwtService;
 import peaksoft.instagramrestproject.dto.*;
+import peaksoft.instagramrestproject.dto.post.PostResponse;
 import peaksoft.instagramrestproject.dto.user.UserResponse;
 import peaksoft.instagramrestproject.entity.Follower;
 import peaksoft.instagramrestproject.entity.User;
@@ -131,27 +132,6 @@ public class UserServiceImpl implements UserService {
                 .status(org.springframework.http.HttpStatus.OK)
                 .build();
     }
-//    @Override
-//    public SimpleResponse updateProfile(Long userId, SignUpRequest request) {
-//        User user = userRepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
-//
-//        // Обновляем основные данные
-//        user.setUsername(request.username());
-//        user.setEmail(request.email());
-//        if (request.password() != null) {
-//            user.setPassword(passwordEncoder.encode(request.password()));
-//        }
-//
-//        // Обновляем инфо (Full Name из твоего ТЗ)
-//        UserInfo userInfo = user.getUserInfo();
-//        userInfo.setFullName(request.fullName());
-//
-//        userRepo.save(user);
-//        return SimpleResponse.builder()
-//                .message("Профиль успешно обновлен")
-//                .status(HttpStatus.OK)
-//                .build();
-//    }
 
     @Override
     public SimpleResponse deleteUser(Long userId) {
@@ -174,17 +154,7 @@ public class UserServiceImpl implements UserService {
                 .status(org.springframework.http.HttpStatus.OK)
                 .build();
     }
-//    @Override
-//    public SimpleResponse deleteUser(Long userId) {
-//        if (!userRepo.existsById(userId)) {
-//            throw new NoSuchElementException("User not found");
-//        }
-//        userRepo.deleteById(userId);
-//        return SimpleResponse.builder()
-//                .message("Аккаунт удален")
-//                .status(HttpStatus.OK)
-//                .build();
-//    }
+
 
     @Override
     public UserProfileResponse userProfile(Long userId) {
@@ -199,7 +169,8 @@ public class UserServiceImpl implements UserService {
                         post.getId(),
                         // Достаем первую картинку из списка картинок этого поста
                         post.getImages().isEmpty() ? null : post.getImages().get(0).getImageURL(),
-                        post.getDescription()
+                        post.getDescription(),
+                        post.getLikes().size()
                 ))
                 .toList();
 
@@ -215,37 +186,37 @@ public class UserServiceImpl implements UserService {
                 .posts(userPosts) // ВАЖНО: теперь здесь реальные данные, а не пустышка!
                 .build();
     }
-//    @Override
-//    public UserProfileResponse userProfile(Long userId) {
-//        User user = userRepo.findById(userId)
-//                .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
-//
-//        return UserProfileResponse.builder()
-//                .id(user.getId()) // Передаем ID из сущности User
-//                .username(user.getUsername())
-//                .fullName(user.getUserInfo().getFullName())
-//                .biography(user.getUserInfo().getBiography())
-//                .image(user.getUserInfo().getImage())
-//                .countSubscribers(user.getFollower().getSubscribers().size())
-//                .countSubscriptions(user.getFollower().getSubscriptions().size())
-//                .posts(new ArrayList<>()) // Посты добавим, когда напишем PostService
-//                .build();
-//    }
-
 
     @Override
     public List<UserResponse> getAllUsers() {
         return userRepo.findAll().stream()
-                .map(user -> UserResponse.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .image(user.getUserInfo().getImage())
-                        .build())
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getUserInfo() != null ? user.getUserInfo().getImage() : null,
+                        user.getFollower() != null ? user.getFollower().getSubscribers().size() : 0,
+                        user.getFollower() != null ? user.getFollower().getSubscriptions().size() : 0,
+                        user.getUserInfo() != null ? user.getUserInfo().getFullName() : null
+                ))
                 .toList();
     }
 
     @Override
     public UserProfileResponse getUserById(Long userId) {
         return userProfile(userId);
+    }
+
+    @Override
+    public List<UserResponse> search(String keyword) {
+        return userRepo.searchUsers(keyword).stream()
+                .map(u -> new UserResponse(
+                        u.getId(),
+                        u.getUsername(),
+                        u.getUserInfo() != null ? u.getUserInfo().getImage() : null,
+                        u.getFollower() != null ? u.getFollower().getSubscribers().size() : 0, // 4-й аргумент
+                        u.getFollower() != null ? u.getFollower().getSubscriptions().size() : 0, // 5-й аргумент
+                        u.getUserInfo() != null ? u.getUserInfo().getFullName() : null // 6-й аргумент
+                ))
+                .toList();
     }
 }

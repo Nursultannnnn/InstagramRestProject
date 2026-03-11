@@ -106,13 +106,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse getPostById(Long postId) {
+
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("Пост не найден"));
 
+        // В методе getPostById
         return new PostResponse(
                 post.getId(),
                 post.getImages().isEmpty() ? null : post.getImages().get(0).getImageURL(),
-                post.getDescription()
+                post.getDescription(),
+                post.getLikes() != null ? post.getLikes().size() : 0
         );
     }
 
@@ -125,7 +128,8 @@ public class PostServiceImpl implements PostService {
                 .map(post -> new PostResponse(
                         post.getId(),
                         post.getImages().isEmpty() ? null : post.getImages().get(0).getImageURL(),
-                        post.getDescription()
+                        post.getDescription(),
+                        post.getLikes() != null ? post.getLikes().size() : 0 // И здесь!
                 ))
                 .toList();
     }

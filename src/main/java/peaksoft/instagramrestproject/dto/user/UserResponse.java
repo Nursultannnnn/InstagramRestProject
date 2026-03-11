@@ -8,5 +8,6 @@ public record UserResponse(
         String username,
         String image,
         int countSubscribers,
-        int countSubscriptions
+        int countSubscriptions,
+        String fullName
 ) {}

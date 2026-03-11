@@ -1,6 +1,7 @@
 package peaksoft.instagramrestproject.dto;
 
 import lombok.Builder;
+import peaksoft.instagramrestproject.dto.post.PostResponse;
 
 import java.util.List;
 
